@@ -84,8 +84,8 @@ def needleman_wunsch(seq1, seq2, match_score=1, mismatch_score=-1, gap_penalty=-
 
 # --- Execução Principal ---
 if __name__ == "__main__":
-    # Sequências de DNA de exemplo (diferentes e com tamanhos diferentes)
-    S1 = "GATTACA"
+    # Sequências de DNA de exemplo
+    S1 = "GATTACACGA"
     S2 = "GCATGC"
 
     # Sistema de pontuação
