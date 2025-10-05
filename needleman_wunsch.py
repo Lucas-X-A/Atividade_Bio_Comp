@@ -74,11 +74,21 @@ def needleman_wunsch(seq1, seq2, match_score=1, mismatch_score=-1, gap_penalty=-
             aligned_seq1 = "-" + aligned_seq1
             aligned_seq2 = seq2[i-1] + aligned_seq2
             i -= 1
-        # O caminho veio da esquerda (gap em seq2)
-        else:
+        # Verifica se o caminho veio da esquerda (gap em seq2)
+        elif j > 0 and current_score == score_matrix[i][j-1] + gap_penalty:
             aligned_seq1 = seq1[j-1] + aligned_seq1
             aligned_seq2 = "-" + aligned_seq2
             j -= 1
+        # Caso de borda, se i ou j for 0
+        else:
+            if i > 0:
+                aligned_seq1 = "-" + aligned_seq1
+                aligned_seq2 = seq2[i-1] + aligned_seq2
+                i -= 1
+            else:
+                aligned_seq1 = seq1[j-1] + aligned_seq1
+                aligned_seq2 = "-" + aligned_seq2
+                j -= 1
             
     return score_matrix, aligned_seq1, aligned_seq2, alignment_score
 
@@ -107,12 +117,19 @@ if __name__ == "__main__":
     print(f"  - Gap: {GAP}\n")
 
     print("--- Matriz de Programacao Dinamica Gerada ---")
-    # Adiciona cabeçalhos para melhor visualização
-    header_s1 = "      " + "   ".join(S1)
+    # Formata e imprime o cabeçalho (S1) com espaçamento fixo
+    header_s1 = "    " + "".join([f"{c:>4}" for c in S1])
     print(header_s1)
+
+    # Itera sobre as linhas da matriz para imprimir com formatação alinhada
     for i in range(matrix.shape[0]):
-        row_header = " " if i == 0 else S2[i-1]
-        print(f"{row_header} {matrix[i,:]}")
+        # Define o cabeçalho da linha (caractere de S2 ou espaço)
+        row_header = "  " if i == 0 else S2[i-1] + " "
+        
+        # Formata cada número na linha para ter um espaço de 4, alinhado à direita
+        row_str = "".join([f"{num:>4}" for num in matrix[i,:]])
+        
+        print(f"{row_header}{row_str}")
     
     print("\n--- Resultado do Alinhamento Global ---")
     print(f"Pontuacao Final: {score}")
